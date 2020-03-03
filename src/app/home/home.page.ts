@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,7 @@ export class HomePage {
 
   totalExpenses = 0;
 
-  constructor() {}
+  constructor(private alertCtrl: AlertController) {}
 
   addReason(event) {
     // obtengo los valores introducidos en los input
@@ -23,6 +24,8 @@ export class HomePage {
     let enteredAmount = (<HTMLInputElement>document.getElementById("input-amount")).value;
 
     if( enteredReason.length <= 0 || enteredAmount.length <= 0 ) {
+      // llamo a la funcion qu emuestra la ventana modal
+      this.presentAlert();
       return;
     }
 
@@ -46,10 +49,22 @@ export class HomePage {
 
   }
 
+  // funcion que borra los valores del inputs
   clear() {
-    // borro los valores de los input
     (<HTMLInputElement>document.getElementById("input-reason")).value = "";
     (<HTMLInputElement>document.getElementById("input-amount")).value = "";
+  }
+
+  // funcion que crea una ventana modal de error con un mensaje y botones especificos
+  presentAlert() {
+    let alert = this.alertCtrl.create({
+      message: 'Please enter valid reason and amount!',
+      header: 'Invalid inputs',
+      buttons: ['Okay']
+    }).then(alertElement => {
+      // muestro la ventana
+      alertElement.present();
+    })
   }
 
 }
